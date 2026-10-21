@@ -1,5 +1,5 @@
 # mostly copied from my own personal makefile for c++ projects
-OUT			:= main.exe
+OUT			:= assembler.exe
 SCR			:= $(wildcard src/*cpp src/**/*.cpp)
 CXXFLAGS	:= -std=c++23
 BUILD_DIR	:= .build
@@ -11,6 +11,8 @@ CLR			:= cls
 RM			:= cmd /c rmdir /s /q
 
 EXE			:= $(BUILD_DIR)/$(OUT)
+
+.PHONY: build run clean clear cls
 
 all: build run clean
 
@@ -24,3 +26,8 @@ run:
 
 clean:
 	-$(RM) $(BUILD_DIR)
+
+clear: clean
+
+cls: clean
+	$(CLR)
