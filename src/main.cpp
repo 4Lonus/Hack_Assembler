@@ -25,14 +25,14 @@ int main(int argc, char* argv[])
 			par.advance();
 			if (par.get_current_line().empty()) continue;
 
-			std::cout << "Parsing: " << par.get_current_line() << std::endl;
-
 			if (par.instruction_type() == InstructionType::E_INSTRUCTION)
-				throw std::runtime_error("Error: Invalid Instruction '" + std::to_string(current_address) + "'");
+				throw std::runtime_error("Error: Invalid Instruction '" + std::to_string(current_address) + "' says '" + par.get_current_line() + "'");
 
 			// If it's Label
 			else if (par.instruction_type() == InstructionType::L_INSTRUCTION)
 			{
+				std::cout << "Label: " << par.get_current_line() << std::endl;
+
 				if (table.contains(par.symbol())) continue;
 
 				table.add_entry(par.symbol(), current_address);
@@ -42,6 +42,12 @@ int main(int argc, char* argv[])
 		}
 
 		/*			SECOND PASS			*/
+		// we write in the same folder with same name, only changin the extention
+		std::string output_path = program_path.substr(0, program_path.find_last_of('.')) + ".hack";
+		std::ofstream output_file(output_path);
+
+		if (!output_file.is_open()) throw std::runtime_error("Error: could not write output file '" + output_path + "'");
+
 		par.reset();
 		int next_variable_address = 16;
 
@@ -50,13 +56,13 @@ int main(int argc, char* argv[])
 			par.advance();
 			if (par.get_current_line().empty()) continue;
 
-			std::cout << "2nd Parsing: " << par.get_current_line() << std::endl;
-
 			std::string bin;
 
 			// If it's NOT Label
 			if (par.instruction_type() != InstructionType::L_INSTRUCTION)
 			{
+				std::cout << "2nd Passing: " << par.get_current_line() << std::endl;
+				
 				// "If the instruction is  @symbol" (A)
 				if (par.instruction_type() == InstructionType::A_INSTRUCTION)
 				{
@@ -65,11 +71,16 @@ int main(int argc, char* argv[])
 					int symbol_value;
 
 					// is a direct value?
-					if (Parser::is_all_digits(symbol)) symbol_value = std::stoi(symbol);
+					if (Parser::is_all_digits(symbol))
+					{
+						try {symbol_value = std::stoi(symbol);}
+						catch (const std::out_of_range&) {throw std::runtime_error("Error: A instruction out of range '" + symbol + "'");}
+					}
 
 					// is a symbol?
 					else
 					{
+						// "If symbol is not in the symbol table, adds it to the table"
 						if(!table.contains(symbol))
 						{
 							table.add_entry(symbol, next_variable_address);
@@ -78,7 +89,11 @@ int main(int argc, char* argv[])
 						symbol_value = table.get_address(symbol);
 					}
 
-					bin = std::bitset<16>(symbol_value).to_string();
+					if (symbol_value < 0 || 32767 < symbol_value)
+						throw std::runtime_error("Error: A instruction value should be between 0 and 32767, it is '" + std::to_string(symbol_value) + "'");
+
+					// "Translates the symbol into its binary value"
+					bin = "0" + std::bitset<15>(symbol_value).to_string();
 				}
 				// "If the instruction is  dest=comp;jump" (C)
 				else if (par.instruction_type() == InstructionType::C_INSTRUCTION)
@@ -94,8 +109,12 @@ int main(int argc, char* argv[])
 				}
 
 				// We write in the output file
+				output_file << bin << std::endl;
 			}
 		}
+
+		// aaaaaand we close the file
+		output_file.close();
 	}
 	catch (const std::exception& e)
 	{
