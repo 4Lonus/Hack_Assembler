@@ -18,9 +18,6 @@ class Parser
 	std::string current_line;
 
 	static inline const std::string DEFAULT_PROGRAM = ".\\programs\\Prog.asm";
-
-	static bool is_all_digits(const std::string& symbol);
-	static bool is_valid_char(const std::string& symbol);
 public:
 	Parser(std::string program_path);
 
@@ -42,10 +39,15 @@ public:
 	std::string comp(); // I like to call it Operation, it's more intuitive
 	std::string jump(); // self explanatory for those who know hack
 
+	void reset(); // For second pass
+
 
 	/*	HELPER FUNCTIONS	*/
 
 	static std::string parse_args(int argc, char* argv[]);
+
+	static bool is_all_digits(const std::string& symbol);
+	static bool is_valid_char(const std::string& symbol);
 };
 
 #endif

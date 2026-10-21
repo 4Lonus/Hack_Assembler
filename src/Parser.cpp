@@ -32,7 +32,7 @@ std::string Parser::advance()
 		current_line.erase(std::remove(current_line.begin(), current_line.end(), '\r'), current_line.end()); // we delete all return
 
 		// if what's remaning is empty or it's only a comment, then we skip
-		if (current_line[0] == '/') continue;
+		if (current_line.empty() || current_line[0] == '/') continue;
 
 		// we look for a inline comments
 		size_t comment_pos = current_line.find('/');
@@ -147,6 +147,12 @@ std::string Parser::jump()
 	std::string jump = current_line.substr(se_pos + 1);
 
 	return jump;
+}
+
+void Parser::reset()
+{
+	program_file.clear();
+	program_file.seekg(0);
 }
 
 

@@ -1,8 +1,9 @@
 #include "Parser.hpp"
 #include "SymbolTable.hpp"
+#include "Code.hpp"
 
-#include <stdexcept>
 #include <iostream>
+#include <bitset>
 
 int main(int argc, char* argv[])
 {
@@ -15,7 +16,6 @@ int main(int argc, char* argv[])
 		Parser par(program_path);
 
 		// We Initialize the smbol table.
-
 		Symbol_Table table;
 
 		/*			FIRST PASS			*/
@@ -42,6 +42,60 @@ int main(int argc, char* argv[])
 		}
 
 		/*			SECOND PASS			*/
+		par.reset();
+		int next_variable_address = 16;
+
+		while (par.has_more_lines())
+		{
+			par.advance();
+			if (par.get_current_line().empty()) continue;
+
+			std::cout << "2nd Parsing: " << par.get_current_line() << std::endl;
+
+			std::string bin;
+
+			// If it's NOT Label
+			if (par.instruction_type() != InstructionType::L_INSTRUCTION)
+			{
+				// "If the instruction is  @symbol" (A)
+				if (par.instruction_type() == InstructionType::A_INSTRUCTION)
+				{
+					std::string symbol = par.symbol();
+
+					int symbol_value;
+
+					// is a direct value?
+					if (Parser::is_all_digits(symbol)) symbol_value = std::stoi(symbol);
+
+					// is a symbol?
+					else
+					{
+						if(!table.contains(symbol))
+						{
+							table.add_entry(symbol, next_variable_address);
+							next_variable_address++;
+						}
+						symbol_value = table.get_address(symbol);
+					}
+
+					bin = std::bitset<16>(symbol_value).to_string();
+				}
+				// "If the instruction is  dest=comp;jump" (C)
+				else if (par.instruction_type() == InstructionType::C_INSTRUCTION)
+				{
+					std::string bin_dest = Code::dest(par.dest());
+					std::string bin_comp = Code::comp(par.comp());
+					std::string bin_jump = Code::jump(par.jump());
+
+					if (bin_dest.empty() || bin_comp.empty() || bin_jump.empty())
+						throw std::runtime_error("Error: Invalid C-Instruction");
+					
+					bin = "111" + bin_comp + bin_dest + bin_jump;
+				}
+
+				// We write in the output file
+			}
+		}
 	}
 	catch (const std::exception& e)
 	{
