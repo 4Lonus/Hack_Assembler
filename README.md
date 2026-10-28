@@ -9,6 +9,7 @@
 This project is a C++ implementation of the Hack Assembler from the Nand2Tetris course. It translates Hack assembly language (`.asm`) into 16-bit machine code (`.hack`). It uses a two-pass architecture to handle predefined symbols, user-defined variables, and labels.
 
 ### Directory Layout
+```text
 hack_Assembler/
 ├─ desensamblador/:
 │   └─ main.cpp
@@ -25,6 +26,7 @@ hack_Assembler/
 ├─ .gitignore
 ├─ makefile
 └─ README.md
+```
 
 ## How to Build
 To compile the assembler, run the following command in your terminal:
