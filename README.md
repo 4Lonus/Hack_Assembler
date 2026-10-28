@@ -11,18 +11,17 @@ This project is a C++ implementation of the Hack Assembler from the Nand2Tetris 
 ### Directory Layout
 hack_Assembler/
 ├─ desensamblador/:
-│  ├─ 
-│  └─ 
+│   └─ main.cpp
 ├─ ensamblador/
-│  ├─ main.cpp
-│  ├─ Parser.hpp
-│  ├─ Code.hpp
-│  └─ SymbolTable.hpp
+│   ├─ main.cpp
+│   ├─ Parser.hpp
+│   ├─ Code.hpp
+│   └─ SymbolTable.hpp
 ├─ pruebas/
-│  ├─ desensamblador/
-│  │  └─ *.hack
-│  └─ ensamblador/
-│     └─ *.asm
+│   ├─ desensamblador/
+│   │   └─ *.hack
+│   └─ ensamblador/
+│       └─ *.asm
 ├─ .gitignore
 ├─ makefile
 └─ README.md
