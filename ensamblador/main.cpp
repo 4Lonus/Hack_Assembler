@@ -30,7 +30,8 @@ int main(int argc, char* argv[])
 			// If it's Label
 			else if (par.instruction_type() == InstructionType::L_INSTRUCTION)
 			{
-				if (table.contains(par.symbol())) continue;
+				if (table.contains(par.symbol()))
+					throw std::runtime_error("Error: Label already in use '" + std::to_string(current_address) + "' ('" + par.get_current_line() + "')");
 
 				table.add_entry(par.symbol(), current_address);
 			}
@@ -93,11 +94,13 @@ int main(int argc, char* argv[])
 				else if (par.instruction_type() == InstructionType::C_INSTRUCTION)
 				{
 					std::string bin_dest = Code::dest(par.dest());
-					std::string bin_comp = Code::comp(par.comp());
-					std::string bin_jump = Code::jump(par.jump());
+					if (bin_dest.empty()) throw std::runtime_error("Error: Invalid destiny '" + par.dest() + "'");
 
-					if (bin_dest.empty() || bin_comp.empty() || bin_jump.empty())
-						throw std::runtime_error("Error: Invalid C-Instruction");
+					std::string bin_comp = Code::comp(par.comp());
+					if (bin_comp.empty()) throw std::runtime_error("Error: Invalid component '" + par.comp() + "'");
+					
+					std::string bin_jump = Code::jump(par.jump());
+					if (bin_dest.empty()) throw std::runtime_error("Error: Invalid jump '" + par.jump() + "'");
 					
 					bin = "111" + bin_comp + bin_dest + bin_jump;
 				}
