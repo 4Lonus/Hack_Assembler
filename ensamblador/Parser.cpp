@@ -1,6 +1,5 @@
 #include "Parser.hpp"
 
-#include <iostream>
 #include <algorithm>
 
 Parser::Parser(std::string program_path)
@@ -149,15 +148,15 @@ std::string Parser::jump()
 	return jump;
 }
 
+
+
+/*			HELPER FUNCTIONS			*/
+
 void Parser::reset()
 {
 	program_file.clear();
 	program_file.seekg(0);
 }
-
-
-
-/*			HELPER FUNCTIONS			*/
 
 std::string Parser::parse_args(int argc, char* argv[])
 {

@@ -10,8 +10,8 @@ This project is a C++ implementation of the Hack Assembler from the Nand2Tetris 
 
 ### Directory Layout
 ```text
-hack_Assembler/
-├─ desensamblador/:
+Hack_Assembler/
+├─ desensamblador/
 │   └─ main.cpp
 ├─ ensamblador/
 │   ├─ main.cpp

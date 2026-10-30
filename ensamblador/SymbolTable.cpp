@@ -6,7 +6,7 @@ Symbol_Table::Symbol_Table()
 	// R entries
 	for (size_t i = 0; i < 16; i++)
 	{
-		std::string r_symbol = "R" + std::to_string(i); // is this valid?
+		std::string r_symbol = "R" + std::to_string(i);
 		add_entry(r_symbol, i);
 	}
 	

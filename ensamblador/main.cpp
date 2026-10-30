@@ -22,11 +22,10 @@ int main(int argc, char* argv[])
 		int current_address = 0;
 		while (par.has_more_lines())
 		{
-			par.advance();
-			if (par.get_current_line().empty()) continue;
+			if (par.advance().empty()) continue;
 
 			if (par.instruction_type() == InstructionType::E_INSTRUCTION)
-				throw std::runtime_error("Error: Invalid Instruction '" + std::to_string(current_address) + "' says '" + par.get_current_line() + "'");
+				throw std::runtime_error("Error: Invalid Instruction '" + std::to_string(current_address) + "' ('" + par.get_current_line() + "')");
 
 			// If it's Label
 			else if (par.instruction_type() == InstructionType::L_INSTRUCTION)
@@ -53,8 +52,7 @@ int main(int argc, char* argv[])
 
 		while (par.has_more_lines())
 		{
-			par.advance();
-			if (par.get_current_line().empty()) continue;
+			if (par.advance().empty()) continue;
 
 			std::string bin;
 

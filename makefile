@@ -30,7 +30,7 @@ en_build:
 
 de_build:
 	$(MKDIR) $(BUILD_DIR)
-	g++ $(SCR_EN) $(CXXFLAGS) -o $(EXE_DE)
+	g++ $(SCR_DE) $(CXXFLAGS) -o $(EXE_DE)
 
 #	RUN
 run: 
