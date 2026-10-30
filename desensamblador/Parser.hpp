@@ -9,7 +9,7 @@ enum class InstructionType {
     A_INSTRUCTION,
     C_INSTRUCTION,
 	// No need for an L type this time arround.
-    E_INSTRUCTION // Error instruction, also may stand for Empty, idk.
+    // Error instruction is also not needed, as instructions are WAY simpler now.
 };
 
 class Parser
@@ -31,7 +31,7 @@ public:
 	InstructionType instruction_type();
 
 	// For A (or Label too)
-	int symbol();
+	int value_A();
 
 	// For C
 

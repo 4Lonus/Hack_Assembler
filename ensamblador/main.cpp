@@ -30,8 +30,6 @@ int main(int argc, char* argv[])
 			// If it's Label
 			else if (par.instruction_type() == InstructionType::L_INSTRUCTION)
 			{
-				std::cout << "Label: " << par.get_current_line() << std::endl;
-
 				if (table.contains(par.symbol())) continue;
 
 				table.add_entry(par.symbol(), current_address);
@@ -59,8 +57,6 @@ int main(int argc, char* argv[])
 			// If it's NOT Label
 			if (par.instruction_type() != InstructionType::L_INSTRUCTION)
 			{
-				std::cout << "2nd Passing: " << par.get_current_line() << std::endl;
-				
 				// "If the instruction is  @symbol" (A)
 				if (par.instruction_type() == InstructionType::A_INSTRUCTION)
 				{

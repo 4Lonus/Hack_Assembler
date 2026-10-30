@@ -24,32 +24,28 @@ bool Parser::has_more_lines()
 std::string Parser::advance()
 {
 	// Check for empty line
-	if (!std::getline(program_file, current_line))
+	if (std::getline(program_file, current_line))
 	{
-		current_line = "";
-		return current_line;
+		while (!current_line.empty() && (current_line.back() == '\r' || current_line.back() == '\n')) current_line.pop_back();
+
+		// If line has number of characters != 16, fail.
+		if (current_line.size() != 16) throw std::runtime_error("Error: got " + std::to_string(current_line.size()) + " char, expected 16 ('" + current_line + "')");
+
+		if (is_all_binary(current_line)) return current_line;
 	}
 
-	while (!current_line.empty() && (current_line.back() == '\r' || current_line.back() == '\n')) current_line.pop_back();
-
-	// If line has number of characters != 16, fail.
-	if (current_line.size() != 16) throw std::runtime_error("Error: expected 16 char in line, got " + std::to_string(current_line.size()) + " ('" + current_line + "')");
-
-	if (is_all_binary(current_line)) return current_line;
-
 	// if there are no lines left, we just return nothing
-	current_line = "";
+	current_line.clear();
 	return "";
 }
 
 InstructionType Parser::instruction_type()
 {
 	if (current_line[0] == '0') return InstructionType::A_INSTRUCTION;
-	if (current_line[0] == '1') return InstructionType::C_INSTRUCTION;
-	else return InstructionType::E_INSTRUCTION;
+	else return InstructionType::C_INSTRUCTION;
 }
 
-int Parser::symbol()
+int Parser::value_A()
 {
 	int symbol = 0;
 

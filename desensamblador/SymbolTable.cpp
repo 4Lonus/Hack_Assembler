@@ -4,13 +4,6 @@
 Symbol_Table::Symbol_Table() : label_number(0)
 {
 	label_number = 0;
-
-	// R entries
-	for (size_t i = 0; i < 16; i++)
-	{
-		std::string r_symbol = "R" + std::to_string(i);
-		add_entry(i, r_symbol);
-	}
 	
 	// Input / Output
 	add_entry(16384, "SCREEN");
