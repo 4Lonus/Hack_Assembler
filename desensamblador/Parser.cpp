@@ -42,7 +42,8 @@ std::string Parser::advance()
 InstructionType Parser::instruction_type()
 {
 	if (current_line[0] == '0') return InstructionType::A_INSTRUCTION;
-	else return InstructionType::C_INSTRUCTION;
+	else if (current_line[1] == '1' || current_line[2] == '1') return InstructionType::C_INSTRUCTION;
+	else throw std::runtime_error("Error: Invalid C instruction ('" + current_line + "')");
 }
 
 int Parser::value_A()

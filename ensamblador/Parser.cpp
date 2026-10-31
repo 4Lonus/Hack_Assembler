@@ -51,11 +51,10 @@ std::string Parser::advance()
 
 InstructionType Parser::instruction_type()
 {
-	if (current_line.empty()) return InstructionType::E_INSTRUCTION;
-	else if (current_line[0] == '@') // We check if it's A
+	if (current_line[0] == '@') // We check if it's A
 	{
 		// If it's only a @, it's an error
-		if (current_line.length() == 1) return InstructionType::E_INSTRUCTION;
+		if (current_line.length() == 1) throw std::runtime_error("Error: no Symbol in A instruction.");
 
 		std::string symbol = current_line.substr(1);
 
